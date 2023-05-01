@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <esp_camera.h>
 
-void camera_setup (camera_config_t * config) {
+esp_err_t camera_setup (camera_config_t * config) {
 
     int CAM_PIN_PWDN = config->pin_pwdn;
     
@@ -17,15 +17,18 @@ void camera_setup (camera_config_t * config) {
     if (err!= ESP_OK) {
         Serial.printf("Camera init failed with error 0x%x\n", err);
     }
+    return err;
 }
 
-camera_fb_t camera_capture_frame() {
+int camera_capture_frame(camera_fb_t * fb_target) {
     camera_fb_t * fb = NULL;
     fb = esp_camera_fb_get();
     if (!fb) {
         Serial.printf("Camera capture failed\n");
+        return 0;
     }
-    return * fb;
+    memcpy(fb_target, fb, sizeof(camera_fb_t));
+    return 1;
 }
 
 #endif // __MONITORING_CAMERA_CAMERA_INTERFACE_H___
