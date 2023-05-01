@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <esp_camera.h>
+#include <esp_timer.h>
 
 esp_err_t camera_setup (camera_config_t * config) {
 
