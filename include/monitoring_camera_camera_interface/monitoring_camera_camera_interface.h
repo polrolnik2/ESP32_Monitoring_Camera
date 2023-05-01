@@ -4,16 +4,7 @@
 #include <Arduino.h>
 #include <esp_camera.h>
 
-class monitoring_camera_camera_interface {
-    private:
-
-    public:
-        monitoring_camera_camera_interface(camera_config_t * config);
-
-        camera_fb_t capture_frame();
-};
-
-monitoring_camera_camera_interface::monitoring_camera_camera_interface(camera_config_t * config) {
+void camera_setup (camera_config_t * config) {
 
     int CAM_PIN_PWDN = config->pin_pwdn;
     
@@ -28,7 +19,7 @@ monitoring_camera_camera_interface::monitoring_camera_camera_interface(camera_co
     }
 }
 
-camera_fb_t monitoring_camera_camera_interface::capture_frame() {
+camera_fb_t camera_capture_frame() {
     camera_fb_t * fb = NULL;
     fb = esp_camera_fb_get();
     if (!fb) {
