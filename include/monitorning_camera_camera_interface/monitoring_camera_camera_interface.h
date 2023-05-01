@@ -1,0 +1,7 @@
+#ifndef __MONITORING_CAMERA_CAMERA_INTERFACE_H___
+#define __MONITORING_CAMERA_CAMERA_INTERFACE_H___
+
+#include <esp_camera.h>
+
+
+#endif // __MONITORING_CAMERA_CAMERA_INTERFACE_H___
