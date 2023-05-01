@@ -20,6 +20,10 @@ public:
     void y_servo_sub(int step);
     void x_servo_set(int angle);
     void y_servo_set(int angle);
+
+    int servo_attached();
+    int y_servo_read();
+    int x_servo_read();
 };
 
 monitoring_camera_servo_control::monitoring_camera_servo_control(int x_servo_pin, int y_servo_pin, int PeriodHertz = 50)
@@ -56,6 +60,18 @@ inline void monitoring_camera_servo_control::x_servo_set(int angle) {
 
 inline void monitoring_camera_servo_control::y_servo_set(int angle) {
     Y_Servo.write(angle);
+}
+
+inline int monitoring_camera_servo_control::servo_attached() {
+    return X_Servo.attached() && Y_Servo.attached();
+}
+
+inline int monitoring_camera_servo_control::y_servo_read() {
+    return Y_Servo.read();
+}
+
+inline int monitoring_camera_servo_control::x_servo_read() {
+    return X_Servo.read();
 }
 
 #endif // __MONITORING_CAMERA_SERVO_CONTROL_H___
