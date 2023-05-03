@@ -56,8 +56,9 @@ void test_camera_setup(void) {
 }
 
 void test_camera_capture_frame(void) {
-    camera_fb_t fb;
-    TEST_ASSERT_EQUAL(1, camera_capture_frame(&fb));
+    uint8_t *jpg_out;
+    size_t jpg_out_size;
+    TEST_ASSERT_EQUAL(1, camera_capture_frame(jpg_out, jpg_out_size));
 }
 
 int run_test(void) {

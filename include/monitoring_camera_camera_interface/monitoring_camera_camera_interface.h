@@ -2,8 +2,11 @@
 #define __MONITORING_CAMERA_CAMERA_INTERFACE_H___
 
 #include <Arduino.h>
+#include <img_converters.h>
 #include <esp_camera.h>
 #include <esp_timer.h>
+
+#define JPG_QUALITY 80
 
 esp_err_t camera_setup (camera_config_t * config) {
 
@@ -21,14 +24,15 @@ esp_err_t camera_setup (camera_config_t * config) {
     return err;
 }
 
-int camera_capture_frame(camera_fb_t * fb_target) {
+int camera_capture_frame(uint8_t * jpg_target, size_t jpg_target_size) {
     camera_fb_t * fb = NULL;
     fb = esp_camera_fb_get();
     if (!fb) {
         Serial.printf("Camera capture failed\n");
         return 0;
     }
-    memcpy(fb_target, fb, sizeof(camera_fb_t));
+    frame2jpg(fb, JPG_QUALITY, &jpg_target, &jpg_target_size);
+    esp_camera_fb_return(fb);
     return 1;
 }
 
