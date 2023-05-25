@@ -52,13 +52,15 @@ static camera_config_t camera_config = {
 };
 
 void test_camera_setup(void) {
+    Serial.println("test_camera_setup");
     TEST_ASSERT_EQUAL(ESP_OK, camera_setup(&camera_config));
 }
 
 void test_camera_capture_frame(void) {
+    Serial.println("test_camera_capture_frame");
     uint8_t *jpg_out;
     size_t jpg_out_size;
-    TEST_ASSERT_EQUAL(1, camera_capture_frame(jpg_out, jpg_out_size));
+    TEST_ASSERT_EQUAL(ESP_OK, camera_capture_frame(jpg_out, jpg_out_size));
 }
 
 int run_test(void) {
@@ -71,8 +73,9 @@ int run_test(void) {
 }
 
 void setup() {
+    Serial.begin(115200);
     delay(2000);
-
+    Serial.println("Monitoring camera camera control test");
     run_test();
 }
 
