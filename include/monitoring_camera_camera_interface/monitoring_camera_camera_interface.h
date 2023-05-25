@@ -10,11 +10,11 @@
 
 esp_err_t camera_setup (camera_config_t * config) {
 
-    int CAM_PIN_PWDN = config->pin_pwdn;
+    int cam_pin_pwdn = config->pin_pwdn;
     
-    if(CAM_PIN_PWDN != -1){
-        pinMode(CAM_PIN_PWDN, OUTPUT);
-        digitalWrite(CAM_PIN_PWDN, LOW);
+    if(cam_pin_pwdn != -1){
+        pinMode(cam_pin_pwdn, OUTPUT);
+        digitalWrite(cam_pin_pwdn, LOW);
     }
 
     esp_err_t err = esp_camera_init(config);
@@ -24,16 +24,20 @@ esp_err_t camera_setup (camera_config_t * config) {
     return err;
 }
 
-int camera_capture_frame(uint8_t * jpg_target, size_t jpg_target_size) {
+esp_err_t camera_capture_frame(uint8_t ** jpg_target, size_t * jpg_target_size) {
     camera_fb_t * fb = NULL;
     fb = esp_camera_fb_get();
     if (!fb) {
         Serial.printf("Camera capture failed\n");
-        return 0;
+        return ESP_FAIL;
     }
-    frame2jpg(fb, JPG_QUALITY, &jpg_target, &jpg_target_size);
+    bool err = frame2jpg(fb, JPG_QUALITY, jpg_target, jpg_target_size);
+    if(!err){
+      Serial.println("JPEG compression failed");
+      return ESP_FAIL;
+    }
     esp_camera_fb_return(fb);
-    return 1;
+    return ESP_OK;
 }
 
 #endif // __MONITORING_CAMERA_CAMERA_INTERFACE_H___

@@ -3,6 +3,8 @@
 
 #include <ESP32Servo.h>
 
+#define step 1
+
 class monitoring_camera_servo_control
 {
 private:
@@ -14,10 +16,10 @@ public:
     monitoring_camera_servo_control(int x_servo_pin, int y_servo_pin, int PeriodHertz);
     ~monitoring_camera_servo_control();
 
-    void x_servo_add(int step);
-    void y_servo_add(int step);
-    void x_servo_sub(int step);
-    void y_servo_sub(int step);
+    void x_servo_add(int step_val);
+    void y_servo_add(int step_val);
+    void x_servo_sub(int step_val);
+    void y_servo_sub(int step_val);
     void x_servo_set(int angle);
     void y_servo_set(int angle);
 
@@ -32,25 +34,27 @@ monitoring_camera_servo_control::monitoring_camera_servo_control(int x_servo_pin
     X_Servo.attach(x_servo_pin);
     Y_Servo.setPeriodHertz(PeriodHertz);
     Y_Servo.attach(y_servo_pin);
+    x_servo_set(0);
+    y_servo_set(0);
 }
 
 monitoring_camera_servo_control::~monitoring_camera_servo_control()
 {
 }
 
-inline void monitoring_camera_servo_control::x_servo_add(int step) {
+inline void monitoring_camera_servo_control::x_servo_add(int step_val) {
     X_Servo.write(X_Servo.read() + step);
 }
 
-inline void monitoring_camera_servo_control::y_servo_add(int step) {
+inline void monitoring_camera_servo_control::y_servo_add(int step_val) {
     Y_Servo.write(Y_Servo.read() + step);
 }
 
-inline void monitoring_camera_servo_control::x_servo_sub(int step) {
+inline void monitoring_camera_servo_control::x_servo_sub(int step_val) {
     X_Servo.write(X_Servo.read() - step);
 }
 
-inline void monitoring_camera_servo_control::y_servo_sub(int step) {
+inline void monitoring_camera_servo_control::y_servo_sub(int step_val) {
     Y_Servo.write(Y_Servo.read() - step);
 }
 

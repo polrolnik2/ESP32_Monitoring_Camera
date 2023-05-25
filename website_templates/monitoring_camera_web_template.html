@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Monitoring Camera</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="description" content="" />
+</head>
+
+<body> 
+    <h1>Monitoring Camera</h1>
+    <img id='stream' src=''>
+    <input type="button" id="u" value="up"/>
+    <input type="button" id="d" value="down"/>
+    <input type="button" id="l" value="left"/>
+    <input type="button" id="r" value="right"/>
+
+    <script>
+        function rotate(direction) {
+            var http = new XMLHttpRequest();
+            var url = window.location.href.slice(0, -1) + "/rotate";
+            var dir = "dir="+direction;
+            http.open("GET", url, true);
+            http.onreadystatechange = function() {
+                if(http.readyState == 4 && http.status == 200) {
+                    alert(http.responseText);
+                }
+            }
+            http.send(dir);
+        }
+        window.onload = document.getElementById("stream").src = window.location.href.slice(0, -1) + ":81/stream";
+    
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById("u").addEventListener("click", rotate("u"));
+            document.getElementById("d").addEventListener("click", rotate("d"));
+            document.getElementById("l").addEventListener("click", rotate("l"));
+            document.getElementById("r").addEventListener("click", rotate("r"));
+        })
+    </script>
+
+</body>
