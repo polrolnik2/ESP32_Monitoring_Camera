@@ -35,7 +35,7 @@ static camera_config_t camera_config = {
     .ledc_channel = LEDC_CHANNEL_0,
 
     .pixel_format = PIXFORMAT_JPEG,//YUV422,GRAYSCALE,RGB565,JPEG
-    .frame_size = FRAMESIZE_UXGA,//QQVGA-UXGA, For ESP32, do not use sizes above QVGA when not JPEG. The performance of the ESP32-S series has improved a lot, but JPEG mode always gives better frame rates.
+    .frame_size = FRAMESIZE_QVGA,//QQVGA-UXGA, For ESP32, do not use sizes above QVGA when not JPEG. The performance of the ESP32-S series has improved a lot, but JPEG mode always gives better frame rates.
 
     .jpeg_quality = 12, //0-63, for OV series camera sensors, lower number means higher quality
     .fb_count = 1, //When jpeg mode is used, if fb_count more than one, the driver will work in continuous mode.
@@ -44,8 +44,8 @@ static camera_config_t camera_config = {
 
 static esp_err_t stream_handler(httpd_req_t *req){
   esp_err_t res = ESP_OK;
-  size_t _jpg_buf_len = 0;
-  uint8_t * _jpg_buf = NULL;
+  size_t fb_len = 0;
+  camera_fb_t * fb = NULL;
   char * part_buf[64];
 
   res = httpd_resp_set_type(req, _STREAM_CONTENT_TYPE);
@@ -55,28 +55,28 @@ static esp_err_t stream_handler(httpd_req_t *req){
 
   while(true){
 
-    res = camera_capture_frame(&_jpg_buf, &_jpg_buf_len); 
+    res = camera_capture_frame(&fb, &fb_len); 
 
     if(res == ESP_OK){
-      size_t hlen = snprintf((char *)part_buf, 64, _STREAM_PART, _jpg_buf_len);
+      size_t hlen = snprintf((char *)part_buf, 64, _STREAM_PART, fb_len);
       res = httpd_resp_send_chunk(req, (const char *)part_buf, hlen);
     }
     if(res == ESP_OK){
-      res = httpd_resp_send_chunk(req, (const char *)_jpg_buf, _jpg_buf_len);
+      res = httpd_resp_send_chunk(req, (const char *)fb->buf, fb_len);
     }
     if(res == ESP_OK){
       res = httpd_resp_send_chunk(req, _STREAM_BOUNDARY, strlen(_STREAM_BOUNDARY));
     }
 
-    if(_jpg_buf){
-      free(_jpg_buf);
-      _jpg_buf = NULL;
+    if(fb){
+      free(fb);
+      fb = NULL;
     }
 
     if(res != ESP_OK){
       break;
     }
-    //Serial.printf("MJPG: %uB\n",(uint32_t)(_jpg_buf_len));
+    //Serial.printf("MJPG: %uB\n",(uint32_t)(fb_len));
   }
   return res;
 }

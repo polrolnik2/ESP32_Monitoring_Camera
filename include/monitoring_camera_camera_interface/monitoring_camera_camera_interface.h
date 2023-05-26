@@ -24,18 +24,15 @@ esp_err_t camera_setup (camera_config_t * config) {
     return err;
 }
 
-esp_err_t camera_capture_frame(uint8_t ** jpg_target, size_t * jpg_target_size) {
+esp_err_t camera_capture_frame(camera_fb_t ** jpg_target, size_t * jpg_target_size) {
     camera_fb_t * fb = NULL;
     fb = esp_camera_fb_get();
     if (!fb) {
         Serial.printf("Camera capture failed\n");
         return ESP_FAIL;
     }
-    bool err = frame2jpg(fb, JPG_QUALITY, jpg_target, jpg_target_size);
-    if(!err){
-      Serial.println("JPEG compression failed");
-      return ESP_FAIL;
-    }
+    *jpg_target = fb;
+    *jpg_target_size = fb->len;
     esp_camera_fb_return(fb);
     return ESP_OK;
 }
