@@ -1,6 +1,10 @@
 #ifndef __MONITORING_CAMERA_CAMERA_INTERFACE_H___
 #define __MONITORING_CAMERA_CAMERA_INTERFACE_H___
 
+// ------------------------------------------------------------------------------------------------
+// Methods for initializing the camera and capturing image in the correct JPEG format.
+// ------------------------------------------------------------------------------------------------
+
 #include <Arduino.h>
 #include <img_converters.h>
 #include <esp_camera.h>
@@ -24,15 +28,16 @@ esp_err_t camera_setup (camera_config_t * config) {
     return err;
 }
 
-esp_err_t camera_capture_frame(camera_fb_t ** jpg_target, size_t * jpg_target_size) {
+esp_err_t camera_capture_frame(uint8_t ** jpg_target, size_t * jpeg_len) {
     camera_fb_t * fb = NULL;
     fb = esp_camera_fb_get();
     if (!fb) {
         Serial.printf("Camera capture failed\n");
         return ESP_FAIL;
     }
-    *jpg_target = fb;
-    *jpg_target_size = fb->len;
+    *jpg_target = new uint8_t[fb->len];
+    memcpy(*jpg_target, fb->buf, fb->len);
+    *jpeg_len = fb->len;
     esp_camera_fb_return(fb);
     return ESP_OK;
 }
