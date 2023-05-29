@@ -25,4 +25,7 @@
 #define CAM_PIN_HREF    23
 #define CAM_PIN_PCLK    22
 
+#define _SSID "AndroidAP2c20"
+#define _PSK "gkda6000"
+
 #endif // __MONITORING_CAMERA_CONFIG_H___

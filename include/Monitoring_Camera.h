@@ -1,6 +1,7 @@
 #ifndef __MONITORING_CAMERA_H___
 #define __MONITORING_CAMERA_H___
 
+#include <freertos/FreeRTOS.h>
 #include "monitoring_camera_config.h"
 #include "monitoring_camera_web_interface/monitoring_camera_web_interface.h"
 
