@@ -5,10 +5,17 @@
 #include <esp_http_server.h>
 #include <monitoring_camera_servo_control/monitoring_camera_servo_control.h>
 
+/*-------------------------------------------------------------------------------------------
+Methods for providing communication between the HTTP website and the Servo controller class.
+Reads the GET code of the site request and activates the appropriate servo control function.
+-------------------------------------------------------------------------------------------*/
+
 monitoring_camera_servo_control * global_servo_control;
 #define GLOBAL_SERVO_CONTROL global_servo_control
 
+// Method for controlling site input requests
 static esp_err_t input_handler (httpd_req_t *req) {
+    Serial.println("Input request detected");
     char data[req->content_len];
     int err = httpd_req_recv(req, data, req->content_len);
     if (err <= 0) {
@@ -35,6 +42,7 @@ static esp_err_t input_handler (httpd_req_t *req) {
     return ESP_OK;
 }
 
+// Starts URI handler for the inputs
 esp_err_t start_input_handler(httpd_handle_t input_httpd) {
 
   httpd_uri_t index_uri = {
@@ -55,6 +63,7 @@ esp_err_t start_input_handler(httpd_handle_t input_httpd) {
 
 }    
 
+// Associates a servo object with the site handler
 void SetServoControl(monitoring_camera_servo_control * servo_control) {
     GLOBAL_SERVO_CONTROL = servo_control;
 }
