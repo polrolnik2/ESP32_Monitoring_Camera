@@ -1,6 +1,11 @@
 #ifndef __MONITORING_CAMERA_SERVO_CONTROL_H___
 #define __MONITORING_CAMERA_SERVO_CONTROL_H___
 
+/*----------------------------------------------------------------
+Class structure storing configuration information for the servos.
+Cointains various methods of controlling the camera orientation.
+----------------------------------------------------------------*/
+
 #include <ESP32Servo.h>
 
 #define step 1
@@ -43,18 +48,22 @@ monitoring_camera_servo_control::~monitoring_camera_servo_control()
 }
 
 inline void monitoring_camera_servo_control::x_servo_add(int step_val) {
+    Serial.printf("x_servo_add %d\n", step_val);
     X_Servo.write(X_Servo.read() + step);
 }
 
 inline void monitoring_camera_servo_control::y_servo_add(int step_val) {
+    Serial.printf("y_servo_add %d\n", step_val);
     Y_Servo.write(Y_Servo.read() + step);
 }
 
 inline void monitoring_camera_servo_control::x_servo_sub(int step_val) {
+    Serial.printf("x_servo_sub %d\n", step_val);
     X_Servo.write(X_Servo.read() - step);
 }
 
 inline void monitoring_camera_servo_control::y_servo_sub(int step_val) {
+    Serial.printf("y_servo_sub %d\n", step_val);
     Y_Servo.write(Y_Servo.read() - step);
 }
 
