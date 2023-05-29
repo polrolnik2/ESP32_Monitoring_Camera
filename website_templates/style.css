@@ -1,0 +1,83 @@
+
+body {
+    background-color: whitesmoke;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.content {
+    width: 474px;
+}
+
+h1 {
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-size: 42px;
+    text-align: center;
+    color: rgb(27, 27, 27);
+}
+
+#stream {
+    border-radius:5px;
+}
+
+.navigator {
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background-color: rgb(196, 196, 196);
+}
+
+.bar {
+    width: 200px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+}
+.bar1 {
+    width: 80px;
+    margin-left: 20px;
+    height: 100px;
+    float: left;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+.bar2 {
+    width: 80px;
+    height: 100px;
+    float: left;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+.bar3 {
+    width: 200px;
+    height: 50px;
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+}
+
+.button {
+    background-color: rgb(196, 196, 196);
+    border-style: none;
+    font-size: 30px;
+    width: 30px;
+    height: 30px;
+    transition: 0.3s;
+}
+
+.button:hover {
+    transition: 0.3s;
+    color:rgb(122, 122, 122);
+    border-style: none;
+    font-size: 30px;
+    width: 30px;
+    height: 30px;
+}
