@@ -10,6 +10,9 @@
 
 WiFiServer server(80);
 
+// Main website HTML, JS and CSS code
+esp_err_t root_handler(httpd_req_t *req) {
+
 const String site_body ="\
 <!DOCTYPE html>\
 <html lang=\"en\">\
@@ -113,7 +116,7 @@ const String site_body ="\
 <body> \
     <div class=\"content\">\
         <h1>Monitoring Camera</h1>\
-        <img id='stream' src='/stream'>\
+        <img id='stream' src='http://"+WiFi.localIP().toString()+":81/stream'>\
 \
         <div class=\"navigator\">\
             <div class=\"bar\">\
@@ -135,16 +138,13 @@ const String site_body ="\
         function rotate(direction) {\
             console.log(\"rotate function called\");\
             var http = new XMLHttpRequest();\
-            var url = \"/rotate?dir='\" + direction + \"'\";\
+            var url = \"/rotate?dir=\" + direction;\
             http.open(\"GET\", url, true);\
             http.send();\
         }\
     </script>\
 \
 </body>";
-
-// Main website HTML, JS and CSS code
-esp_err_t root_handler(httpd_req_t *req) {
 
     httpd_resp_set_type(req, "text/html");
 
@@ -168,7 +168,8 @@ esp_err_t web_server_init (const char * SSID, const char * PSK) {
 
     httpd_config_t config = HTTPD_DEFAULT_CONFIG();
     httpd_handle_t stream_httpd = NULL;
-    config.server_port = 81;
+    config.server_port = 80;
+    config.core_id = 0;
 
     httpd_uri_t index_uri = {
       .uri       = "/",
@@ -177,10 +178,9 @@ esp_err_t web_server_init (const char * SSID, const char * PSK) {
       .user_ctx  = NULL
     };
     
-    //Serial.printf("Starting web server on port: '%d'\n", config.server_port);
+    startCameraServer();
 
     esp_err_t err = httpd_start(&stream_httpd, &config);
-    startCameraServer(stream_httpd);
     err = start_input_handler(stream_httpd);
 
     if (err != ESP_OK) {
