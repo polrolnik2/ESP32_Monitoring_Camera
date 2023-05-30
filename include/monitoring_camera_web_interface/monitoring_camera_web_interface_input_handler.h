@@ -16,14 +16,9 @@ monitoring_camera_servo_control * global_servo_control;
 // Method for controlling site input requests
 static esp_err_t input_handler (httpd_req_t *req) {
     Serial.println("Input request detected");
-    char data[req->content_len];
-    int err = httpd_req_recv(req, data, req->content_len);
-    if (err <= 0) {
-        Serial.printf("GET read error code: %d\n", err);
-        return ESP_FAIL;
-    }
+    String uri = req->uri;
 
-    switch (data[0]) {
+    switch (uri[uri.indexOf("=") + 1]) {
         case 'u':
             GLOBAL_SERVO_CONTROL->y_servo_add(step);
         break;
@@ -38,7 +33,7 @@ static esp_err_t input_handler (httpd_req_t *req) {
         break;
     }
 
-    httpd_resp_send(req, data, strlen(data));
+    httpd_resp_send(req, uri.c_str(), strlen(uri.c_str()));
     return ESP_OK;
 }
 
